@@ -31,7 +31,7 @@ Postgresql
 Spring JdbcTemplate
 Spring Data JPA
 Spring Security
-HTML, Bootstrap, jQuery, Thymeleaf
+HTML, Bootstrap, jQuery,
 
 References:
 Spring Initializer https://start.spring.io/
