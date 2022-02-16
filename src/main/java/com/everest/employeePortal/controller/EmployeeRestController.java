@@ -3,10 +3,11 @@ package com.everest.employeePortal.controller;
 import com.everest.employeePortal.entities.Employee;
 import com.everest.employeePortal.services.EmployeeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,8 +19,10 @@ public class EmployeeRestController {
     private final EmployeeService employeeService;
 
     @GetMapping("")
-    public List<Employee> getAllEmployees() {
-        return employeeService.getAll();
+    public Page<Employee> getAllEmployees(@RequestParam int page) {
+        Sort defaultSort = Sort.by(Sort.Direction.ASC,"id");
+        return employeeService.getAll(PageRequest.of(page, 1,defaultSort));
+
     }
 
     @GetMapping("/{id}")
