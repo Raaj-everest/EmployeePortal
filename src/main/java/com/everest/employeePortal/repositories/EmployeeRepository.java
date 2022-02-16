@@ -1,18 +1,18 @@
 package com.everest.employeePortal.repositories;
 
 import com.everest.employeePortal.entities.Employee;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-    @Query(value = "SELECT * FROM EMPLOYEES WHERE FIRST_NAME iLIKE %?1%", nativeQuery = true)
-    List<Employee> findByFirstNameLike(String data);
+    @Query(value = "SELECT * FROM EMPLOYEES WHERE FIRST_NAME iLIKE %?1% or LAST_NAME iLike %?1%", nativeQuery = true)
+    Page<Employee> findHavingNameLike(String data, Pageable pageable);
 
-    @Query(value = "SELECT * FROM EMPLOYEES WHERE LAST_NAME iLIKE %?1%", nativeQuery = true)
-    List<Employee> findByLastNameLike(String data);
+
+
 }
