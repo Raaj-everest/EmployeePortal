@@ -21,7 +21,11 @@ public class EmployeeService {
         if (oldEmployee.isEmpty()) {
             throw new EmployeeNotFoundException("No employee found with given ID : " + id);
         }
+        Long permanent_address_id = employeeRepository.getPermanentAddressId(id);
+        Long present_address_id = employeeRepository.getPresentAddressId(id);
         newEmployee.setId(id);
+        newEmployee.getPermanentAddress().setId(permanent_address_id);
+        newEmployee.getPresentAddress().setId(present_address_id);
         return employeeRepository.save(newEmployee);
     }
 }
