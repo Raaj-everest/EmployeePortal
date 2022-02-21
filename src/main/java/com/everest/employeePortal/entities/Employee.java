@@ -1,10 +1,8 @@
 package com.everest.employeePortal.entities;
 
-import com.everest.employeePortal.entities.enums.Designation;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -30,27 +28,35 @@ public class Employee {
     @NotBlank(message = "The last Name field must not blank")
     private String lastName;
 
-    @Column(name = "date_of_birth")
-    @Past
-    private LocalDate dateOfBirth;
-
-    @Column(name = "date_of_join", nullable = false)
-    @FutureOrPresent
-    private LocalDate dateOfJoin;
-
-    @NotNull(message = "your role must be specified")
-    private Designation designation;
-
     @Column(name = "company_mail", nullable = false)
     @Email(message = "look again at the mail provided")
-    private String everestEmail;
+    private String everestEmailId;
+
+    @Column(name = "password", nullable = false)
+    @NotEmpty(message = "Provide a password for your mail")
+    private String password;
 
     @Column(name = "personal_mail")
     @Email
-    private String personalEmail;
+    private String personalEmailId;
+
+    @Column(name = "date_of_birth")
+    @Past
+    private LocalDate dob;
+
+    @Column(name = "date_of_join", nullable = false)
+    private LocalDate doj;
 
     @Column
-    @Size(min = 10,max = 100,message = "Bio should contain a minimum info about you")
+    @NotBlank(message = "your role must be specified")
+    private String designation;
+
+    @Column(name = "Experience_in_years")
+    @NotNull(message = "your role must be specified")
+    private int experienceInYears;
+
+    @Column
+    @Size(min = 5, max = 100, message = "Bio should contain a minimum info about you")
     private String bio;
 
     @OneToOne(cascade = CascadeType.ALL)
