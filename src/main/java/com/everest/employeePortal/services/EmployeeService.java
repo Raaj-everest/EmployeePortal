@@ -17,6 +17,10 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+
+    public Page<Employee> searchBy(String data, Pageable pageable) {
+        return employeeRepository.findHavingNameLike(data,pageable);
+
     public Employee create(Employee employee) {
         employeeRepository.save(employee);
         return employee;

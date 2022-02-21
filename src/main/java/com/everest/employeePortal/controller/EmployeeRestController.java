@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,6 +18,17 @@ public class EmployeeRestController {
 
     private final EmployeeService employeeService;
 
+    @GetMapping("/search")
+    public Page<Employee> searchEmployeesBy(@RequestParam String keyWord,
+                                            @RequestParam(defaultValue = "1") Integer pageNo,
+                                            @RequestParam(defaultValue = "1") Integer pageSize,
+                                            @RequestParam(defaultValue = "id") String sortBy) {
+        Sort sort = Sort.by(Sort.Direction.ASC, sortBy);
+      if (pageNo < 1) {
+            pageNo = 1;
+        }
+        return employeeService.searchBy(keyWord, PageRequest.of(pageNo-1, pageSize, sort));
+    }
 
     @PostMapping("")
     public Employee createEmployee(@Valid @RequestBody Employee employee) {
