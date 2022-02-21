@@ -18,6 +18,10 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+    public Page<Employee> searchBy(String data, Pageable pageable) {
+        return employeeRepository.findHavingNameLike(data, pageable);
+    }
+
     public Employee create(Employee employee) {
         employeeRepository.save(employee);
         return employee;
@@ -47,6 +51,7 @@ public class EmployeeService {
         }
         return employee.get();
     }
+
     public void delete(Long id) {
         Optional<Employee> employee = employeeRepository.findById(id);
         if (employee.isEmpty()) {
@@ -55,3 +60,4 @@ public class EmployeeService {
         employeeRepository.delete(employee.get());
     }
 }
+

@@ -19,6 +19,17 @@ public class EmployeeRestController {
 
     private final EmployeeService employeeService;
 
+    @GetMapping("/search")
+    public Page<Employee> searchEmployeesBy(@RequestParam String keyWord,
+                                            @RequestParam(defaultValue = "1") Integer pageNo,
+                                            @RequestParam(defaultValue = "1") Integer pageSize,
+                                            @RequestParam(defaultValue = "id") String sortBy) {
+        Sort sort = Sort.by(Sort.Direction.ASC, sortBy);
+        if (pageNo < 1) {
+            pageNo = 1;
+        }
+        return employeeService.searchBy(keyWord, PageRequest.of(pageNo - 1, pageSize, sort));
+    }
 
     @PostMapping("")
     public Employee createEmployee(@Valid @RequestBody Employee employee) {
@@ -46,6 +57,7 @@ public class EmployeeRestController {
     public Employee getEmployeeByID(@PathVariable Long id) {
         return employeeService.getByID(id);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity deleteEmployee(@PathVariable Long id) {
         employeeService.delete(id);
