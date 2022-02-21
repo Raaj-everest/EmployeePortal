@@ -1,6 +1,7 @@
 package com.everest.employeePortal.controller;
 
 import com.everest.employeePortal.entities.Employee;
+import com.everest.employeePortal.models.EmployeeResults;
 import com.everest.employeePortal.services.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,20 +21,20 @@ public class EmployeeRestController {
     private final EmployeeService employeeService;
 
     @GetMapping("/search")
-    public Page<Employee> searchEmployeesBy(@RequestParam String keyWord,
-                                            @RequestParam(defaultValue = "1") Integer pageNo,
-                                            @RequestParam(defaultValue = "1") Integer pageSize,
-                                            @RequestParam(defaultValue = "id") String sortBy) {
+    public EmployeeResults searchEmployeesBy(@RequestParam String keyWord,
+                                             @RequestParam(defaultValue = "1") Integer pageNo,
+                                             @RequestParam(defaultValue = "1") Integer pageSize,
+                                             @RequestParam(defaultValue = "id") String sortBy) {
         Sort sort = Sort.by(Sort.Direction.ASC, sortBy);
         if (pageNo < 1) {
             pageNo = 1;
         }
-        return employeeService.searchBy(keyWord, PageRequest.of(pageNo - 1, pageSize, sort));
+        return new EmployeeResults(employeeService.searchBy(keyWord, PageRequest.of(pageNo - 1, pageSize, sort)));
     }
 
     @PostMapping("")
-    public Employee createEmployee(@Valid @RequestBody Employee employee) {
-        return employeeService.create(employee);
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.create(employee));
     }
 
     @PutMapping("/{id}")
@@ -42,14 +43,14 @@ public class EmployeeRestController {
     }
 
     @GetMapping("")
-    public Page<Employee> getAllEmployees(@RequestParam(defaultValue = "1") Integer pageNo,
+    public EmployeeResults getAllEmployees(@RequestParam(defaultValue = "1") Integer pageNo,
                                           @RequestParam(defaultValue = "1") Integer pageSize,
                                           @RequestParam(defaultValue = "id") String sortBy) {
         Sort sort = Sort.by(Sort.Direction.ASC, sortBy);
         if (pageNo < 1) {
             pageNo = 1;
         }
-        return employeeService.getAll(PageRequest.of(pageNo - 1, pageSize, sort));
+        return new EmployeeResults(employeeService.getAll(PageRequest.of(pageNo - 1, pageSize, sort)));
 
     }
 
