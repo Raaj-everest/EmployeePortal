@@ -1,5 +1,6 @@
 package com.everest.employeePortal.advices;
 
+import com.everest.employeePortal.exceptions.EmployeeNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +15,14 @@ public class ErrorHandling {
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentException(MethodArgumentNotValidException exception) {
+        ErrorResponse response = new ErrorResponse();
+        response.setMessage(exception.getLocalizedMessage());
+        response.setLocalDateTime(LocalDateTime.now());
+        return response;
+    }
+    @ExceptionHandler({EmployeeNotFoundException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleRuntimeException(EmployeeNotFoundException exception) {
         ErrorResponse response = new ErrorResponse();
         response.setMessage(exception.getLocalizedMessage());
         response.setLocalDateTime(LocalDateTime.now());
