@@ -6,8 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -16,7 +17,37 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+
     public Page<Employee> searchBy(String data, Pageable pageable) {
         return employeeRepository.findHavingNameLike(data,pageable);
+
+    public Employee create(Employee employee) {
+        employeeRepository.save(employee);
+        return employee;
+    }
+
+    public Employee update(Employee newEmployee, Long id) {
+        Optional<Employee> oldEmployee = employeeRepository.findById(id);
+        if (oldEmployee.isEmpty()) {
+            throw new EmployeeNotFoundException("No employee found with given ID : " + id);
+        }
+        Long permanentAddressId = employeeRepository.getPermanentAddressId(id);
+        Long presentAddressId = employeeRepository.getPresentAddressId(id);
+        newEmployee.setId(id);
+        newEmployee.getPermanentAddress().setId(permanentAddressId);
+        newEmployee.getPresentAddress().setId(presentAddressId);
+        return employeeRepository.save(newEmployee);
+    }
+
+    public Page<Employee> getAll(Pageable page) {
+        return employeeRepository.findAll(page);
+    }
+
+    public Employee getByID(Long id) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if (employee.isEmpty()) {
+            throw new EmployeeNotFoundException("No Employee found with given ID :" + id);
+        }
+        return employee.get();
     }
 }

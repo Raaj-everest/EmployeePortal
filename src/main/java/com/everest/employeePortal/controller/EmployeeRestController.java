@@ -6,10 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,11 +20,40 @@ public class EmployeeRestController {
 
     @GetMapping("/search")
     public Page<Employee> searchEmployeesBy(@RequestParam String keyWord,
-                                            @RequestParam(defaultValue = "0") Integer pageNo,
+                                            @RequestParam(defaultValue = "1") Integer pageNo,
                                             @RequestParam(defaultValue = "1") Integer pageSize,
                                             @RequestParam(defaultValue = "id") String sortBy) {
         Sort sort = Sort.by(Sort.Direction.ASC, sortBy);
-        return employeeService.searchBy(keyWord, PageRequest.of(pageNo, pageSize, sort));
+      if (pageNo < 1) {
+            pageNo = 1;
+        }
+        return employeeService.searchBy(keyWord, PageRequest.of(pageNo-1, pageSize, sort));
     }
 
+    @PostMapping("")
+    public Employee createEmployee(@Valid @RequestBody Employee employee) {
+        return employeeService.create(employee);
+    }
+
+    @PutMapping("/{id}")
+    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
+        return employeeService.update(employee, id);
+    }
+
+    @GetMapping("")
+    public Page<Employee> getAllEmployees(@RequestParam(defaultValue = "1") Integer pageNo,
+                                          @RequestParam(defaultValue = "1") Integer pageSize,
+                                          @RequestParam(defaultValue = "id") String sortBy) {
+        Sort sort = Sort.by(Sort.Direction.ASC, sortBy);
+        if (pageNo < 1) {
+            pageNo = 1;
+        }
+        return employeeService.getAll(PageRequest.of(pageNo - 1, pageSize, sort));
+
+    }
+
+    @GetMapping("/{id}")
+    public Employee getEmployeeByID(@PathVariable Long id) {
+        return employeeService.getByID(id);
+    }
 }
