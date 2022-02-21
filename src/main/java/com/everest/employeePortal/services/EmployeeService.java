@@ -1,6 +1,7 @@
 package com.everest.employeePortal.services;
 
 import com.everest.employeePortal.entities.Employee;
+import com.everest.employeePortal.exceptions.EmployeeNotFoundException;
 import com.everest.employeePortal.repositories.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -45,5 +46,12 @@ public class EmployeeService {
             throw new EmployeeNotFoundException("No Employee found with given ID :" + id);
         }
         return employee.get();
+    }
+    public void delete(Long id) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if (employee.isEmpty()) {
+            throw new EmployeeNotFoundException("NO Employee Found with given Id :" + id + "perhaps he is not exists ");
+        }
+        employeeRepository.delete(employee.get());
     }
 }

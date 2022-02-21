@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,5 +45,10 @@ public class EmployeeRestController {
     @GetMapping("/{id}")
     public Employee getEmployeeByID(@PathVariable Long id) {
         return employeeService.getByID(id);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteEmployee(@PathVariable Long id) {
+        employeeService.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

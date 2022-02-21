@@ -1,4 +1,4 @@
-package com.everest.employeePortal.services;
+package com.everest.employeePortal.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
