@@ -19,11 +19,14 @@ public class EmployeeRestController {
     private final EmployeeService employeeService;
 
     @GetMapping("")
-    public Page<Employee> getAllEmployees( @RequestParam(defaultValue = "0") Integer pageNo,
+    public Page<Employee> getAllEmployees( @RequestParam(defaultValue = "1") Integer pageNo,
                                            @RequestParam(defaultValue = "1") Integer pageSize,
                                            @RequestParam(defaultValue = "id") String sortBy) {
         Sort sort = Sort.by(Sort.Direction.ASC,sortBy);
-        return employeeService.getAll(PageRequest.of(pageNo, pageSize,sort));
+        if(pageNo<1){
+            pageNo=1;
+        }
+        return employeeService.getAll(PageRequest.of(pageNo-1, pageSize,sort));
 
     }
 
