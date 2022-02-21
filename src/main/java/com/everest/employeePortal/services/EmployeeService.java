@@ -1,13 +1,13 @@
 package com.everest.employeePortal.services;
 
-import com.everest.employeePortal.entities.Address;
 import com.everest.employeePortal.entities.Employee;
 import com.everest.employeePortal.repositories.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,5 +33,17 @@ public class EmployeeService {
         newEmployee.getPermanentAddress().setId(permanentAddressId);
         newEmployee.getPresentAddress().setId(presentAddressId);
         return employeeRepository.save(newEmployee);
+    }
+
+    public Page<Employee> getAll(Pageable page) {
+        return employeeRepository.findAll(page);
+    }
+
+    public Employee getByID(Long id) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if (employee.isEmpty()) {
+            throw new EmployeeNotFoundException("No Employee found with given ID :" + id);
+        }
+        return employee.get();
     }
 }
