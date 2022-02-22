@@ -28,8 +28,8 @@ public class Employee {
     @NotBlank(message = "The last Name field must not blank")
     private String lastName;
 
-    @Column(name = "company_mail", nullable = false)
-    @Email(message = "look again at the mail provided")
+    @Column(name = "company_mail", nullable = false,unique = true)
+    @Email(regexp = ".+@everest.engineering", message = "look again at the mail provided")
     private String everestEmailId;
 
     @Column(name = "password", nullable = false)
