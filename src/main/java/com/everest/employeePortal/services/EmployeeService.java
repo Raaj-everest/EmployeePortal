@@ -1,6 +1,7 @@
 package com.everest.employeePortal.services;
 
 import com.everest.employeePortal.entities.Employee;
+import com.everest.employeePortal.exceptions.EmailIdAlreadyExistedException;
 import com.everest.employeePortal.exceptions.EmployeeNotFoundException;
 import com.everest.employeePortal.repositories.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,11 @@ public class EmployeeService {
     }
 
     public Employee create(Employee employee) {
-        employeeRepository.save(employee);
-        return employee;
+        Optional<Employee> check = employeeRepository.findByEverestEmailId(employee.getEverestEmailId());
+        if(check.isPresent()){
+            throw new EmailIdAlreadyExistedException("Email id is already given to some other employee");
+        }
+        return employeeRepository.save(employee);
     }
 
     public Employee update(Employee newEmployee, Long id) {

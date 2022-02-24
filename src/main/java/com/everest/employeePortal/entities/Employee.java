@@ -1,6 +1,7 @@
 package com.everest.employeePortal.entities;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
@@ -10,7 +11,6 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 @Entity
 @Table(name = "employees")
 public class Employee {
