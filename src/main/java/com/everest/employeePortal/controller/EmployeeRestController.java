@@ -4,7 +4,6 @@ import com.everest.employeePortal.entities.Employee;
 import com.everest.employeePortal.models.EmployeeResults;
 import com.everest.employeePortal.services.EmployeeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -38,14 +37,14 @@ public class EmployeeRestController {
     }
 
     @PutMapping("/{id}")
-    public Employee updateEmployee(@PathVariable Long id,@Valid @RequestBody Employee employee) {
+    public Employee updateEmployee(@PathVariable Long id, @Valid @RequestBody Employee employee) {
         return employeeService.update(employee, id);
     }
 
     @GetMapping("")
     public EmployeeResults getAllEmployees(@RequestParam(defaultValue = "1") Integer pageNo,
-                                          @RequestParam(defaultValue = "1") Integer pageSize,
-                                          @RequestParam(defaultValue = "id") String sortBy) {
+                                           @RequestParam(defaultValue = "1") Integer pageSize,
+                                           @RequestParam(defaultValue = "id") String sortBy) {
         Sort sort = Sort.by(Sort.Direction.ASC, sortBy);
         if (pageNo < 1) {
             pageNo = 1;
